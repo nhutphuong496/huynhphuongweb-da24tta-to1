@@ -1,10 +1,18 @@
-﻿<!DOCTYPE html>
-<html lang = "vi" >
-     <head>
-		<title>thiết kế trang web</title>
-		<meta charet = "utf-8"
-     </head>
-	<body>
-		<P>tiếp tục thiết kế trang</P>
-	</body>
-</html>
+﻿.container{
+	padding: 10px;
+	background: 	#FF00FF
+}
+h1
+ {
+	 font-size: 14pt;	 
+	 
+ }
+body{
+	background: #FF00FF;
+	   background-image :url ("../assets/.jpg");
+	   margin: 0;
+	   padding:0;
+	
+}
+ 
+ 
