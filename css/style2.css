@@ -1,0 +1,29 @@
+body{
+    font-family: Arial ;
+    background-color: blueviolet;
+     margin: auto;   
+}
+.container
+ {
+  
+    width: 400px;
+    margin: auto;     
+    padding: 20px;
+    border-radius: 10px;
+}
+input{
+    width: 200px;
+    height: 25px;
+    adding: 150px;
+}
+
+div.form-group label{
+    display: inline-block;
+    width: 120px;
+    transition: 0.5s;
+}
+
+button{
+    background-color: chartreuse;
+}
+
