@@ -1,0 +1,258 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quản lý ảnh</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial;
+}
+
+body{
+    background:#f2f2f2;
+    padding:30px;
+}
+
+h1{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.form{
+    width:400px;
+    background:white;
+    padding:20px;
+    margin:auto;
+    border-radius:10px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.2);
+    margin-bottom:30px;
+}
+
+.form input,
+.form textarea{
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+}
+
+.form button{
+    margin-top:10px;
+    padding:10px 15px;
+    border:none;
+    background:#007bff;
+    color:white;
+    cursor:pointer;
+    border-radius:5px;
+}
+
+.gallery{
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.card{
+    width:280px;
+    background:white;
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 4px 10px rgba(0,0,0,0.2);
+}
+
+.card img{
+    width:100%;
+    height:180px;
+    object-fit:cover;
+}
+
+.content{
+    padding:15px;
+}
+
+.price{
+    color:red;
+    font-size:20px;
+    font-weight:bold;
+    margin:10px 0;
+}
+
+.btn{
+    padding:8px 12px;
+    border:none;
+    color:white;
+    border-radius:5px;
+    cursor:pointer;
+    margin-right:5px;
+}
+
+.edit{
+    background:orange;
+}
+
+.delete{
+    background:red;
+}
+
+.detail{
+    background:#007bff;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>Quản Lý Ảnh Huỳnh Phương</h1>
+
+<div class="form">
+
+    <input type="text" id="name" placeholder="Tên ảnh">
+
+    <input type="text" id="price" placeholder="Giá">
+
+    <input type="text" id="image" placeholder="Link hình ảnh">
+
+    <textarea id="description" placeholder="Giới thiệu ảnh"></textarea>
+
+    <button onclick="addProduct()">Thêm Ảnh</button>
+
+</div>
+
+<div class="gallery" id="gallery"></div>
+
+<script>
+
+let products = [
+
+    {
+        name:"Ảnh Huỳnh Phương",
+        price:"999.000 VNĐ",
+        image:"../assets/images/avt2.jpg",
+        description:"Bộ ảnh chill giữa phố phường vì tôi là một chàng trai thư giản."
+    },
+
+    {
+        name:"Ảnh Huỳnh Phương",
+        price:"999.000 VNĐ",
+        image:"../assets/images/avt.jpg",
+        description:"Ảnh trên con thuyền lên đên giữa một dòng sông rộng lớn xanh biết."
+    }
+
+];
+
+function renderProducts(){
+
+    let gallery = document.getElementById("gallery");
+
+    gallery.innerHTML = "";
+
+    products.forEach((product,index)=>{
+
+        gallery.innerHTML += `
+
+        <div class="card">
+
+            <img src="${product.image}">
+
+            <div class="content">
+
+                <h3>${product.name}</h3>
+
+                <div class="price">${product.price}</div>
+
+                <p>${product.description}</p>
+
+                <br>
+
+                <button class="btn detail"
+                    onclick="viewDetail(${index})">
+                    Chi tiết
+                </button>
+
+                <button class="btn edit"
+                    onclick="editProduct(${index})">
+                    Sửa
+                </button>
+
+                <button class="btn delete"
+                    onclick="deleteProduct(${index})">
+                    Xóa
+                </button>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+}
+
+function addProduct(){
+
+    let name = document.getElementById("name").value;
+
+    let price = document.getElementById("price").value;
+
+    let image = document.getElementById("image").value;
+
+    let description = document.getElementById("description").value;
+
+    products.push({
+        name:name,
+        price:price,
+        image:image,
+        description:description
+    });
+
+    renderProducts();
+
+}
+
+function deleteProduct(index){
+
+    products.splice(index,1);
+
+    renderProducts();
+
+}
+
+function editProduct(index){
+
+    let newName = prompt("Nhập tên mới",products[index].name);
+
+    let newPrice = prompt("Nhập giá mới",products[index].price);
+
+    let newDescription = prompt("Nhập mô tả mới",products[index].description);
+
+    products[index].name = newName;
+
+    products[index].price = newPrice;
+
+    products[index].description = newDescription;
+
+    renderProducts();
+
+}
+
+function viewDetail(index){
+
+    alert(products[index].description);
+
+}
+
+renderProducts();
+
+</script>
+
+</body>
+</html>
