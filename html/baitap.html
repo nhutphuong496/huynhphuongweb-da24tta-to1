@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Bài tập DOM: Nhập - Xuất</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+        }
+        .container {
+            text-align: center;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            width: 200px;
+            outline: none;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 6px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            margin-left: 8px;
+        }
+        button:hover { background-color: #0056b3; }
+        h2 {
+            margin-top: 25px;
+            font-size: 28px;
+            min-height: 40px; /* Giữ chỗ trước cho chữ xuất hiện không bị giật màn hình */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- 1. PHẦN NHẬP (INPUT) -->
+        <input type="text" id="nameInput" placeholder="Nhập tên của bạn...">
+        <button id="greetBtn">GỬI LỜI CHÀO</button>
+
+        <!-- 2. PHẦN XUẤT (OUTPUT) -->
+        <h2 id="greetingOutput"></h2>
+    </div>
+
+    <!-- 3. PHẦN XỬ LÝ JAVASCRIPT DOM -->
+    <script>
+        // Bước 1: Chọn các phần tử DOM (DOM Selection)
+        const nameInput = document.getElementById('nameInput');
+        const greetBtn = document.getElementById('greetBtn');
+        const greetingOutput = document.getElementById('greetingOutput');
+
+        // Bước 2: Viết hàm xử lý logic Nhập -> Xuất
+        function handleGreeting() {
+            // Lấy dữ liệu Nhập (Input) và xóa khoảng trắng thừa ở 2 đầu bằng .trim()
+            const username = nameInput.value.trim();
+
+            // Kiểm tra điều kiện đầu vào
+            if (username === "") {
+                greetingOutput.textContent = "Vui lòng nhập tên của bạn nhé! 🥺";
+                greetingOutput.style.color = "red";
+                return; // Dừng hàm, không xử lý tiếp
+            }
+
+            // Xử lý dữ liệu Xuất (Output) ra màn hình
+            greetingOutput.textContent = `Xin chào, ${username}! 🎉`;
+            
+            // Tạo màu chữ ngẫu nhiên để bài demo sinh động hơn
+            const randomColor = `hsl(${Math.floor(Math.random() * 360)}, 70%, 50%)`;
+            greetingOutput.style.color = randomColor;
+
+            // Xóa sạch ô nhập sau khi gửi thành công để sẵn sàng cho lần nhập tiếp theo
+            nameInput.value = "";
+        }
+
+        // Bước 3: Lắng nghe sự kiện (Event Listeners)
+        // Cách 1: Người dùng click vào nút Gửi
+        greetBtn.addEventListener('click', handleGreeting);
+
+        // Cách 2: Người dùng nhấn phím Enter ngay trong ô nhập liệu
+        nameInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                handleGreeting();
+            }
+        });
+    </script>
+</body>
+</html>
