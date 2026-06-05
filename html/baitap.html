@@ -1,104 +1,126 @@
 
-<!DOCTYPE html>
+\<!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <title>Bài tập DOM: Nhập - Xuất</title>
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f7fa;
-        }
-        .container {
-            text-align: center;
-            padding: 30px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        input {
-            padding: 10px;
-            font-size: 16px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            width: 200px;
-            outline: none;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 6px;
-            border: none;
-            background-color: #007bff;
-            color: white;
-            margin-left: 8px;
-        }
-        button:hover { background-color: #0056b3; }
-        h2 {
-            margin-top: 25px;
-            font-size: 28px;
-            min-height: 40px; /* Giữ chỗ trước cho chữ xuất hiện không bị giật màn hình */
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nhập Xuất Sản Phẩm - Thêm/Xóa + QR Hóa đơn</title>
+<style>
+body{font-family:Arial,sans-serif; background:#f4f4f4; padding:20px;}
+.container{max-width:800px; margin:auto; background:white; padding:20px; border-radius:15px; box-shadow:0 5px 15px rgba(0,0,0,0.2);}
+h1{text-align:center; margin-bottom:20px;}
+.row{display:flex; gap:10px; margin-bottom:10px;}
+.row input{flex:1; padding:8px; border:1px solid #ccc; border-radius:8px;}
+.row button{padding:0 8px; border:none; border-radius:8px; background:red; color:white; cursor:pointer;}
+.row button:hover{background:#c00;}
+button.mainBtn{padding:10px 15px; border:none; border-radius:8px; background:#4facfe; color:white; cursor:pointer; margin-right:10px;}
+button.mainBtn:hover{background:#00c6fb;}
+#chiTietSP p{margin:5px 0;}
+.money{color:red; font-weight:bold;}
+#qrCode{margin-top:15px;}
+</style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- 1. PHẦN NHẬP (INPUT) -->
-        <input type="text" id="nameInput" placeholder="Nhập tên của bạn...">
-        <button id="greetBtn">GỬI LỜI CHÀO</button>
+<div class="container" id="mainPage">
+<h1>Hệ Thống Tính Tiền </h1>
 
-        <!-- 2. PHẦN XUẤT (OUTPUT) -->
-        <h2 id="greetingOutput"></h2>
-    </div>
+<div id="productList">
+  <div class="row productRow">
+    <input type="text" placeholder="Tên sản phẩm" class="tenSP">
+    <input type="number" placeholder="Số lượng" class="soLuong" min="1">
+    <input type="number" placeholder="Đơn giá " class="donGia" min="1">
+    <button onclick="removeProduct(this)">❌</button>
+  </div>
+</div>
 
-    <!-- 3. PHẦN XỬ LÝ JAVASCRIPT DOM -->
-    <script>
-        // Bước 1: Chọn các phần tử DOM (DOM Selection)
-        const nameInput = document.getElementById('nameInput');
-        const greetBtn = document.getElementById('greetBtn');
-        const greetingOutput = document.getElementById('greetingOutput');
+<button class="mainBtn" onclick="addProduct()">➕ Thêm sản phẩm</button>
+<button class="mainBtn" onclick="tinhTien()">💰 Tính Tiền & Tạo QR</button>
 
-        // Bước 2: Viết hàm xử lý logic Nhập -> Xuất
-        function handleGreeting() {
-            // Lấy dữ liệu Nhập (Input) và xóa khoảng trắng thừa ở 2 đầu bằng .trim()
-            const username = nameInput.value.trim();
+<div id="chiTietSP"></div>
+<div class="money" id="tongTien"></div>
+<div id="qrCode"></div>
+</div>
 
-            // Kiểm tra điều kiện đầu vào
-            if (username === "") {
-                greetingOutput.textContent = "Vui lòng nhập tên của bạn nhé! 🥺";
-                greetingOutput.style.color = "red";
-                return; // Dừng hàm, không xử lý tiếp
-            }
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+function addProduct(){
+  let div = document.createElement('div');
+  div.className = 'row productRow';
+  div.innerHTML = `
+    <input type="text" placeholder="Tên sản phẩm" class="tenSP">
+    <input type="number" placeholder="Số lượng" class="soLuong" min="1">
+    <input type="number" placeholder="Đơn giá " class="donGia" min="1">
+    <button onclick="removeProduct(this)">❌</button>
+  `;
+  document.getElementById('productList').appendChild(div);
+}
 
-            // Xử lý dữ liệu Xuất (Output) ra màn hình
-            greetingOutput.textContent = `Xin chào, ${username}! 🎉`;
-            
-            // Tạo màu chữ ngẫu nhiên để bài demo sinh động hơn
-            const randomColor = `hsl(${Math.floor(Math.random() * 360)}, 70%, 50%)`;
-            greetingOutput.style.color = randomColor;
+function removeProduct(btn){
+  let row = btn.parentElement;
+  row.remove();
+}
 
-            // Xóa sạch ô nhập sau khi gửi thành công để sẵn sàng cho lần nhập tiếp theo
-            nameInput.value = "";
-        }
+function tinhTien(){
+  let rows = document.querySelectorAll('.productRow');
+  let data = [];
+  let tongTien = 0;
+  for(let i=0;i<rows.length;i++){
+    let tenSP = rows[i].querySelector('.tenSP').value.trim();
+    let soLuong = parseInt(rows[i].querySelector('.soLuong').value);
+    let donGiaInput = rows[i].querySelector('.donGia').value;
 
-        // Bước 3: Lắng nghe sự kiện (Event Listeners)
-        // Cách 1: Người dùng click vào nút Gửi
-        greetBtn.addEventListener('click', handleGreeting);
+    if(tenSP === "" || isNaN(soLuong) || donGiaInput===""){
+      alert(`Sản phẩm thứ ${i+1} chưa nhập đầy đủ thông tin!`);
+      return;
+    }
 
-        // Cách 2: Người dùng nhấn phím Enter ngay trong ô nhập liệu
-        nameInput.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter') {
-                handleGreeting();
-            }
-        });
-    </script>
+    let donGia = parseInt(donGiaInput)*1000;
+    let thanhTien = soLuong*donGia;
+    tongTien += thanhTien;
+
+    data.push({tenSP, soLuong, donGia, thanhTien});
+  }
+
+  // Hiển thị chi tiết
+  let chiTietHTML = "";
+  data.forEach(d=>{
+    chiTietHTML += `<p><strong>${d.tenSP}</strong> - Số lượng: ${d.soLuong}, Đơn giá: ${d.donGia.toLocaleString('vi-VN')} VNĐ, Thành tiền: ${d.thanhTien.toLocaleString('vi-VN')} VNĐ</p>`;
+  });
+  document.getElementById('chiTietSP').innerHTML = chiTietHTML;
+  document.getElementById('tongTien').innerText = `Tổng tiền: ${tongTien.toLocaleString('vi-VN')} VNĐ`;
+
+  // Lưu dữ liệu tạm thời để chuyển trang
+  localStorage.setItem('hoaDonData', JSON.stringify({data, tongTien}));
+
+  // Tạo QR dẫn sang trang hóa đơn
+  document.getElementById('qrCode').innerHTML = "";
+  new QRCode(document.getElementById("qrCode"), {
+    text: location.origin + location.pathname + "?invoice=true",
+    width: 150,
+    height: 150
+  });
+}
+
+// Khi load trang với ?invoice=true => hiển thị hóa đơn
+window.onload = function(){
+  const params = new URLSearchParams(window.location.search);
+  if(params.get('invoice')==='true'){
+    let invoice = JSON.parse(localStorage.getItem('hoaDonData'));
+    if(!invoice){
+      alert("Không có dữ liệu hóa đơn!");
+      return;
+    }
+    document.body.innerHTML = '<div class="container"><h1>Hóa Đơn</h1><div id="chiTietSP"></div><div class="money" id="tongTien"></div></div>';
+    let chiTietHTML = "";
+    invoice.data.forEach(d=>{
+      chiTietHTML += `<p><strong>${d.tenSP}</strong> - Số lượng: ${d.soLuong}, Đơn giá: ${d.donGia.toLocaleString('vi-VN')} VNĐ, Thành tiền: ${d.thanhTien.toLocaleString('vi-VN')} VNĐ</p>`;
+    });
+    document.getElementById('chiTietSP').innerHTML = chiTietHTML;
+    document.getElementById('tongTien').innerText = `Tổng tiền: ${invoice.tongTien.toLocaleString('vi-VN')} VNĐ`;
+  }
+}
+</script>
+
 </body>
 </html>
